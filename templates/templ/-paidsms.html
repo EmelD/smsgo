@@ -1,0 +1,49 @@
+<div class="main-column">
+    <form name="paidsms" method="post" action="/paidsms" id="form-paid-sms">
+        <div class="form-field">
+            <label for="p_phone">Номер абонента<span id="p_operator_box"></span></label>
+            <input type="text" name="p_phone" value="" id="p_phone" class="field" placeholder="Например, +79208456789" autofocus>
+        </div>
+        <div class="form-field">
+            <label for="p_sender">Отправитель</label>
+            <input type="text" name="p_sender" value="" id="p_sender" class="field" placeholder="Например, Anonymous">
+            
+        </div>
+        <div class="form-field">
+            <label for="p_message">Сообщение<span id="p_limit_box"></span></label>
+            <textarea name="p_message" id="p_message" class="field <?php if ( isset($earr['p_message']) ) echo 'error'; ?>" rows="4"></textarea>
+        </div>
+        <div id="paid-send-box">
+            <div class="form-field">
+                <input type="hidden" name="p_template" id="p_template" value="">
+                <input type="submit" name="p_send" id="p_send" value="Отправить">
+            </div>
+        </div>
+        <div id="paid-descr">
+            <em>После нажатия на кнопку «Отправить» вы перейдете на страницу оплаты сообщения</em>
+        </div>
+    </form>
+</div>
+
+<div class="sidebar">
+    <h2 class="margin-top-small-negative">Хотите разыграть друга?</h2>
+    <p>Укажите в поле отправитель любое незапрещенное слово, набранное латинскими буквами и/или цифрами. Стоимость отправки сообщения — <strong>всего 5 рублей</strong>*!<br>
+        <span class="small">* – цена может немного отличаться для разных способов оплаты</span>
+    </p>
+    <h2 class="margin-top">Попробуйте наши розыгрыши</h2>
+    <p class="refresh"><a href="/paidsms" class="dotted" id="refresh-jokes">Еще варианты</a></p>
+    <div id="jokes-box">
+        <p><a href="/paidsms/0" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/1" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 1</a><br><span>1 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/2" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 2</a><br><span>2 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/3" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 3</a><br><span>3 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/4" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 4</a><br><span>4 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/5" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 5</a><br><span>5 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/6" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 6</a><br><span>6 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/7" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 7</a><br><span>7 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/8" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 8</a><br><span>8 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/9" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 9</a><br><span>9 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+        <p><a href="/paidsms/10" class="dotted" title="Скопировать имя отправителя и сообщение в форму">LUNATIKI 10</a><br><span>10 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+    </div>
+</div>
+<div class="clearfix"></div>

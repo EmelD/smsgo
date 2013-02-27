@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>SmsGo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <!-- for IE6-8--><!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <link type="text/css" href="/static/css/bootstrap.css" rel="stylesheet"/>
+    <link type="text/css" href="/static/css/bootstrap-responsive.css" rel="stylesheet"/>
+
+    <script src="/static/js/jquery-1.7.2.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/bootstrap-tab.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script>
+        function ajax_request(url, params, response_div_id, button_id, redirect,img) {
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: params,
+                beforeSend: function () {
+                    //$(response_div_id).text('Loading...');
+                    //$(button_id).button('loading');
+                },
+                success: function (response) {
+                    alert(response.callback.name)
+                    if(response){
+                        if(response.type != 'error'){
+                            if (response.callback) {
+                                callbacks[response.callback.name](response.callback.params);
+                            }
+                        }
+                        else{
+
+                        }
+                    }
+                }
+            });
+        }
+        function selectOperator(){
+            var number = $('#num').val();
+            if(number && number.length > 7){
+                ajax_request('http://127.0.0.1:8000/operator/',phone=number,'test',undefined,undefined,'captcha')
+            }
+        }
+        function send_message(){
+            //if($('#msg').val() != '' && $('#captcha').val() != ''){
+                var param = new Object();
+                param.msg = $("#msg").val();
+                param.captcha = $("#code").val();
+                //var values = '{"' + 'msg":"' + $('#msg').val() +'","captcha":"' + $('#code').val() +'"}';
+            ajax_request('http://127.0.0.1:8000/send_msg/',param);//form_send('http://127.0.0.1:8000/send_msg/',param);
+            //}
+            //else{
+            //    alert('некорректно заполнены поля');
+            //}
+
+        }
+    </script>
+</head>
+<body>
+<form action="../" method="post" id="message">
+	<table>
+		<tr>
+			<td>Number</td>
+			<td><input name="number" type="text" id="num" onblur="selectOperator();"/></td>
+		</tr>
+		<tr>
+			<td>Message</td>
+			<td><textarea name="message" id="msg"></textarea></td>
+		</tr>
+		<tr>
+			<td>Code</td>
+			<td><input name="code" type="text" id="code"/></td>
+		</tr>
+		<tr>
+			<td>Captcha</td>
+			<td><img id="captcha"/></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><div onclick="send_message()"> send</div></td>
+		</tr>
+	</table>
+</form>
+<div id="test"></div>
+</body>
+</html>

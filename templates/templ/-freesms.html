@@ -1,0 +1,38 @@
+<div class="main-column">
+    <!--<form name="freesms" method="post" action="/" id="form-free-sms">-->
+        <div class="form-field">
+            <label for="f_phone">Номер абонента<span id="f_operator_box"></span></label>
+            <input type="text" name="f_phone" value=""  onblur="selectOperator();" id="f_phone" class="field " placeholder="Например, +79208456789" autofocus>
+            <p class="large <?php if ( isset($f_operator) && $f_operator['type'] == 2 ) echo ''; else echo 'display-none'; ?>" id="exclude-operator-box">К сожалению, бесплатная отправка СМС абонентам этого оператора возможна только с сайта оператора. Также вы можете <a href="/paidsms" class="dotted show-paid-sms">отправить СМС с подменой номера</a> с помощью нашего сервиса</p>
+        </div>
+        <div class="form-field" id="f_message-box">
+            <label for="f_message">Сообщение<span id="f_limit_box"></span></label>
+            <!--<textarea name="f_message" id="f_message" class="field <?php if ( isset($earr['f_message']) ) echo 'error'; ?>" rows="4"><?php if ( isset($f_message) ) echo $f_message; ?></textarea>-->
+            <textarea name="f_message" id="f_message" class="field" rows="4"></textarea>
+        </div>
+        <div id="captcha-box">
+            <div class="form-field">
+                <label for="f_captcha">Защитный код</label>
+                <input type="text" name="f_captcha" id="f_captcha" class="field">
+            </div>
+            <div class="form-field">
+                <input type="submit" name="f_send" id="f_send" value="Отправить" onclick="send_message()">
+            </div>
+        </div>
+        <div id="captcha-place">
+            <div>
+                <img id="captcha-image" src="/static/img/blank.png">
+                <em id="captcha-status">Для загрузки защитного кода введите номер абонента</em>
+                <br><a href="#" class="refresh display-none" id="captcha-update" onclick="selectOperator();"><span class="dotted">Обновить защитный код</span></a>
+            </div>
+        </div>
+    <!--</form>-->
+</div>
+
+<div class="sidebar">
+    <h2 class="margin-top-small-negative">Хотите отправить СМС-сообщение бесплатно?</h2>
+    <p>Воспользовавшись нашим сервисом, вы сможете отправить бесплатное СМС абонентам Мегафон, Билайн, МТС, ТЕЛЕ2 и другим. Если нужного вам оператора нет в <a href="/about#free">списке поддерживаемых</a>, <a href="/feedback" class="dotted show-feedback">сообщите нам об этом</a>, и мы постараемся добавить его как можно скорее!</p>
+    <p>Если у вас <a href="/help#5">возникли сложности с вводом номера</a>, или какие-то другие проблемы, посетите раздел <a href="/help">помощь</a></p>
+    <p class="large">Хотите разыграть друга? <a href="/paidsms" class="dotted show-paid-sms">Отправьте СМС с подменой номера!</a></p>
+</div>
+<div class="clearfix"></div>

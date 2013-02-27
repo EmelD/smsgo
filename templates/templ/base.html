@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    {% block meta %}{% endblock %}
+    {% block title %}{% endblock %}
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="js/libs/html5shiv.js"></script>
+    <![endif]-->
+    {% block css %}{% endblock %}
+    {% block favicon %}{% endblock %}
+    {% block extrahead %}{% endblock %}
+</head>
+
+<body class="mainpage">
+<div align="center"><div>Внимание! Сервис находится в режиме тестирования!</div></div>
+{% block navbar%}{% endblock %}
+{% block content %}{% endblock %}
+{% block footer %}{% endblock %}
+
+</body>
+</html>

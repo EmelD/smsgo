@@ -1,0 +1,394 @@
+{% extends "templ/base.html" %}
+
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="keywords" content="">
+        <meta name="description" content="Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!">
+    {% endblock %}
+
+    {% block title %}
+        <title>Отправляй SMS без забот!</title>
+    {% endblock %}
+
+    {% block css %}
+        <link rel="stylesheet" href="/static/css/style.css">
+    {% endblock %}
+
+{% block navbar%}
+    {% include "templ/-header.html" %}
+    <div id="main-form-container">
+        <div class="content">
+            <div class="clearfix"></div>
+                <span id="main-form-title">
+                    <h1>Отправить СМС</h1> <a href="/" class="show-free-sms current" id="show-free-sms">бесплатно</a> или <a href="/paidsms" class="show-paid-sms" id="show-paid-sms">с подменой номера</a>
+                </span>
+        </div>
+        <div class="clearfix"></div>
+        <div id="forms-container">
+            <div id="free-sms">
+                <div class="content">
+                    {% include 'templ/-freesms.html' %}
+                </div>
+            </div>
+            <noindex>
+                <div id="paid-sms" class="minor">
+                    <div class="content">
+                        {% include 'templ/-paidsms.html' %}
+                    </div>
+                </div>
+            </noindex>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="main-column">
+            <h2>SMS — технология, позволяющая осуществлять приём и передачу коротких текстовых сообщений сотовым телефоном</h2>
+            <p>Текст может состоять из алфавитно-цифровых символов. Максимальный размер сообщения в стандарте GSM — 140 байт (1120 бит). Таким образом, при использовании 7-битной кодировки (латинский алфавит и цифры) можно отправлять сообщения длиной до 160 символов. При использовании 8-битной кодировки (немецкий, французский язык) можно отправлять сообщения длиной до 140 символов.</p>
+            <p>Для поддержки других национальных алфавитов (китайского, арабского, русского и др.) используется 2-байтовая (16-битная) кодировка UCS-2. Таким образом, SMS, написанное кириллицей, не может превышать 70 знаков. Существуют[3] и поддерживаются частью телефонов и восьмибитные кодировки кириллицы — так называемая локальная российская кодировка KOI8-R и Windows-1251.</p>
+        </div>
+        <div class="sidebar">
+            {% include 'templ/-adv_sidebar.html' %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% include 'templ/-footer.html' %}
+{% include 'templ/-feedback.html' %}
+{% endblock %}
+
+{% block footer %}
+    <script src="/static/js/libs/jquery-1.7.2.min.js"></script>
+    <script src="/static/js/libs/jquery.validate.min.js"></script>
+    <script src="/static/js/functions.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script>
+    $(document).ready(function() {
+
+        initializeSmsForm ('free', $('#free-sms'), $('#paid-sms'), $('#f_phone'), $('#p_phone'));
+
+        getLastTweet ('smsgome', $('#twitter-tweet'), 'Идет загрузка твитов…');
+
+        initializeJokes ($('#refresh-jokes'), $('#jokes-box p'), 150, $('#p_sender'), $('#p_message'), $('#p_template'));
+
+        var freeSmsFormValidator = $('#form-free-sms').validate({
+            rules: {
+                f_phone: {
+                    required: true,
+                    phoneCheck: true,
+                    dullCheck: false
+                },
+                f_message: {
+                    required: true,
+                    maxlength: 160
+                },
+                f_captcha: {
+                    required: true
+                }
+            },
+            messages: {
+                f_phone: {
+                    required: 'Введите номер абонента',
+                    phoneCheck: 'Вы ввели некорректный номер',
+                    dullCheck: 'Вы ввели неподдерживаемый номер'
+                },
+                f_message: {
+                    required: 'Напишите сообщение',
+                    maxlength: 'Вы написали слишком большое сообщение'
+                },
+                f_captcha: {
+                    required: 'Введите защитный код'
+                }
+            },
+            errorElement: 'span',
+            submitHandler: function(form) {
+                $('#logo').removeClass('animated').addClass('animated');
+                form.submit();
+            }
+        });
+
+        var paidSmsFormValidator = $('#form-paid-sms').validate({
+            rules: {
+                p_phone: {
+                    required: true,
+                    phoneCheck: true,
+                    dullCheck: false
+                },
+                p_sender: {
+                    required: true,
+                    senderCheck: true
+                },
+                p_message: {
+                    required: true,
+                    maxlength: 160
+                }
+            },
+            messages: {
+                p_phone: {
+                    required: 'Введите номер абонента',
+                    phoneCheck: 'Вы ввели некорректный номер',
+                    dullCheck: 'Вы ввели неподдерживаемый номер'
+                },
+                p_sender: {
+                    required: 'Введите имя отправителя',
+                    senderCheck: 'Вы ввели некорректное имя отправителя'
+                },
+                p_message: {
+                    required: 'Напишите сообщение',
+                    maxlength: 'Вы написали слишком большое сообщение'
+                }
+            },
+            errorElement: 'span',
+            submitHandler: function(form) {
+                $('#logo').removeClass('animated').addClass('animated');
+                form.submit();
+            }
+        });
+
+        var feedbackFormValidator = $('#feedback').validate({
+            rules: {
+                message: {
+                    required: true
+                },
+                email: {
+                    required: true
+                }
+            },
+            messages: {
+                message: {
+                    required: 'Напишите сообщение'
+                },
+                email: {
+                    required: 'Введите электронную почту для ответа'
+                }
+            },
+            errorElement: 'span'
+        });
+
+        // default message sizes (minimal among all operators)
+        var length_lat = 140;
+        var length_cyr = 50;
+
+        // work on phone
+        $('#f_phone')
+                .keyup(function(){
+                    if ($(this).data('excluded') == 'excluded') $(this).trigger('change');
+                    if ($(this).val() != '') if (freeSmsFormValidator.element('#f_phone')) $(this).trigger('change');
+                    $(this)
+                            .rules('add', {
+                                dullCheck: false
+                            });
+                })
+                .change(function(){
+
+                    // clear some information
+                    $(this).data('excluded', '');
+                    setOperator ('идет определение оператора…', '', $('#f_operator_box'));
+
+                    // hide captcha
+                    $('#captcha-image')
+                            .unbind('load')
+                            .attr('src', 'img/blank.png');
+                    $('#captcha-status').html('Идет загрузка защитного кода…');
+                    $('#captcha-update').css('display', 'none');
+
+                    $.getJSON('ajax.php', {phone: $(this).val()}, function(data){
+                        // if number is incorrect
+                        if (data.type == 3) {
+                            $('#f_phone')
+                                    .rules('add', {
+                                        dullCheck: false
+                                    });
+                            freeSmsFormValidator.element('#f_phone');
+                            setOperator ('', '', $('#f_operator_box'));
+                            $('#captcha-status').html('Для загрузки защитного кода<br>введите номер абонента');
+                            $('#f_message-box, #captcha-box, #captcha-place').css('display', 'block');
+                            $('#exclude-operator-box').css('display', 'none');
+                        };
+                        // if it's excluded operator
+                        if (data.type == 2) {
+                            $('#f_phone')
+                                    .data('excluded', 'excluded')
+                                    .rules('add', {
+                                        dullCheck: false
+                                    });
+                            freeSmsFormValidator.element('#f_phone');
+                            setOperator (data.title, data.url, $('#f_operator_box'));
+                            $('#captcha-status').html('Для загрузки защитного кода<br>введите номер абонента');
+                            $('#f_message-box, #captcha-box, #captcha-place').css('display', 'none');
+                            $('#exclude-operator-box').css('display', 'block');
+                        };
+                        // if number is unsupported
+                        if (data.type == 1) {
+                            $('#f_phone')
+                                    .rules('add', {
+                                        dullCheck: true
+                                    });
+                            freeSmsFormValidator.element('#f_phone');
+                            setOperator ('', '', $('#f_operator_box'));
+                            $('#captcha-status').html('Для загрузки защитного кода<br>введите номер абонента');
+                            $('#f_message-box, #captcha-box, #captcha-place').css('display', 'block');
+                            $('#exclude-operator-box').css('display', 'none');
+                        };
+                        // if number is correct
+                        if (data.type == 0) {
+                            $('#f_phone')
+                                    .rules('add', {
+                                        dullCheck: false
+                                    });
+                            freeSmsFormValidator.resetForm();
+                            setOperator (data.title, data.url, $('#f_operator_box'));
+                            length_lat = data.length_lat;
+                            length_cyr = data.length_cyr;
+
+                            // дергаем пересчет количества символов сообщения
+                            $('#f_message').trigger('keyup');
+
+                            $('#f_message-box, #captcha-box, #captcha-place').css('display', 'block');
+                            $('#exclude-operator-box').css('display', 'none');
+
+                            // load captcha
+                            $('#captcha-status').html('Идет загрузка защитного кода…');
+                            $('#captcha-image')
+                                    .attr('src', data.captcha)
+                                    .load(function(){
+                                        $('#captcha-status').html('');
+                                        $('#captcha-update')
+                                                .css('display', 'inline')
+                                                .click(function(){
+                                                    $('#captcha-image').attr('src', $('#captcha-image').attr('src'));
+                                                    return false;
+                                                });
+                                    });
+                        }
+                    });
+                });
+
+        $('#p_phone')
+                .keyup(function(){
+                    if ($(this).val() != '') if (paidSmsFormValidator.element('#p_phone')) $(this).trigger('change');
+                    $(this)
+                            .rules('add', {
+                                dullCheck: false
+                            });
+                })
+                .change(function(){
+
+                    // clear some information
+                    setOperator ('идет определение оператора…', '', $('#p_operator_box'));
+
+                    $.getJSON('ajaxpaidsms.php', {phone: $(this).val()}, function(data){
+                        // if number is incorrect
+                        if (data.type == 3) {
+                            $('#p_phone')
+                                    .rules('add', {
+                                        dullCheck: false
+                                    });
+                            paidSmsFormValidator.element('#p_phone');
+                            setOperator ('', '', $('#p_operator_box'));
+                        };
+                        // if number is unsupported
+                        if (data.type == 1) {
+                            $('#p_phone')
+                                    .rules('add', {
+                                        dullCheck: true
+                                    });
+                            paidSmsFormValidator.element('#p_phone');
+                            setOperator ('', '', $('#p_operator_box'));
+                        };
+                        // if number is correct
+                        if (data.type == 0) {
+                            $('#p_phone')
+                                    .rules('add', {
+                                        dullCheck: false
+                                    });
+                            paidSmsFormValidator.resetForm();
+                            setOperator (data.title, '', $('#p_operator_box'));
+                        }
+                    });
+                });
+
+        // work on message
+        $('#f_message')
+                .keyup(function(){
+                    if (defineLanguage ($(this).val()) == 'en') {
+                        messageCheck ($(this), length_lat, $('#f_limit_box'));
+                        $(this).rules('add', {
+                            maxlength: length_lat
+                        });
+                    }
+                    else {
+                        messageCheck ($(this), length_cyr, $('#f_limit_box'));
+                        $(this).rules('add', {
+                            maxlength: length_cyr
+                        });
+                    }
+                });
+
+        $('#p_message')
+                .keyup(function(){
+                    if (defineLanguage ($(this).val()) == 'en') {
+                        messageCheck ($(this), 300, $('#p_limit_box'));
+                        $(this).rules('add', {
+                            maxlength: 300
+                        });
+                    }
+                    else {
+                        messageCheck ($(this), 130, $('#p_limit_box'));
+                        $(this).rules('add', {
+                            maxlength: 130
+                        });
+                    }
+                });
+
+        // Set focus on captcha if it's incorrect
+        if ( $('#f_captcha').hasClass('error') ) $('#f_captcha').focus();
+
+        // Set focus on sender if it's incorrect
+        if ( $('#p_sender').hasClass('error') ) $('#p_sender').focus();
+
+        // Rewrite default message for non-script version
+        $('#captcha-status').html('Для загрузки защитного кода<br>введите номер абонента');
+
+        // Disable click on refreshing jokes link and jpkes links
+        $('#refresh-jokes, #jokes-box a').click( function() {return false;});
+
+        $('.show-free-sms')
+                .bind('click', function() {
+                    if (!($('#show-free-sms').hasClass('current'))) {
+                        cloneFormData ('free', $('#f_phone'), $('#f_message'), $('#p_phone'), $('#p_message'));
+                        showFreeSms ($('#free-sms'), $('#paid-sms'), $('#show-free-sms'), $('#show-paid-sms'), $('#f_phone'), 150);
+                        freeSmsFormValidator.resetForm();
+                        paidSmsFormValidator.resetForm();
+                    };
+                    return false;
+                });
+
+        $('.show-paid-sms')
+                .bind('click', function() {
+                    if (!($('#show-paid-sms').hasClass('current'))) {
+                        cloneFormData ('paid', $('#f_phone'), $('#f_message'), $('#p_phone'), $('#p_message'));
+                        showPaidSms ($('#free-sms'), $('#paid-sms'), $('#show-free-sms'), $('#show-paid-sms'), $('#p_phone'), 150);
+                        freeSmsFormValidator.resetForm();
+                        paidSmsFormValidator.resetForm();
+                    };
+                    return false;
+                });
+
+        $('.show-feedback')
+                .bind('click', function() {
+                    return initializeModalWindow ($('#modal-box'), $('#overlay'), $('#modal-close'), 150);
+                });
+
+    });
+
+    /*
+     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+     s.parentNode.insertBefore(g,s)}(document,'script'));
+     */
+    </script>
+{% endblock %}

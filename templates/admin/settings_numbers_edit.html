@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <title>Редактирование диапазона номеров</title>   
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="css/custom.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <link rel="shortcut icon" href="/favicon.ico">
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a href="http://smsgo.me/" id="logo" title="Перейти на SmsGo.me"></a>
+                    <ul class="nav">
+                        <li><a href="index.html">Статистика</a></li>
+                        <li><a href="logs_free.html">SMS-сообщения</a></li>
+                        <li class="active"><a href="settings_messages.html">Настройки</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li><a href="login.html">Выйти</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    
+                    <ul class="nav nav-tabs">
+                        <li><a href="settings_messages.html">Шаблоны</a></li>
+                        <li><a href="settings_countries.html">Страны</a></li>
+                        <li><a href="settings_regions.html">Регионы</a></li>
+                        <li><a href="settings_operators.html">Операторы</a></li>
+                        <li class="active"><a href="settings_numbers.html">Диапазоны номеров</a></li>
+                    </ul>
+                    <ul class="nav nav-pills">
+                        <li><a href="settings_numbers.html" title="Просмотр диапазонов номеров"><i class="icon-th-list margin-right"></i>Просмотр</a></li>
+                        <li><a href="settings_numbers_add.html" title="Новый диапазон номеров"><i class="icon-plus margin-right"></i>Добавить</a></li>
+                    </ul>
+
+                    <h1>Редактирование диапазона номеров</h1>
+
+                    <div class="alert alert-success margin-top">Диапазон номеров обновлен! <a href="settings_numbers.html" title="Просмотр диапазонов номеров">Перейти к просмотру диапазонов номеров</a></div>
+
+                    <form class="form-horizontal" id="form">
+                        <div class="control-group">
+                            <label class="control-label" for="range_from">Диапазон, от</label>
+                            <div class="controls">
+                                <input type="text" name="range_from" id="range_from" class="span4">  
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="range_to">Диапазон, до</label>
+                            <div class="controls">
+                                <input type="text" name="range_to" id="range_to" class="span4">  
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="country">Страна</label>
+                            <div class="controls">
+                                <select name="country" id="country" class="span4">
+                                    <option value="1" selected>Россия</option>
+                                    <option value="2">Украина</option>
+                                    <option value="3">Казахстан</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="region">Регион</label>
+                            <div class="controls">
+                                <select name="region" id="region" class="span4">
+                                    <option value="1" selected>Брянская область</option>
+                                    <option value="2">Москва</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="operator">Оператор</label>
+                            <div class="controls">
+                                <select name="operator" id="operator" class="span4">
+                                    <option value="1" selected>МТС</option>
+                                    <option value="2">Билайн</option>
+                                    <option value="3">Мегафон</option>
+                                    <option value="4">Теле2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Обновить диапазон номеров</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div> <!-- /container -->
+
+        <script src="js/jquery-1.7.2.min.js"></script>
+        <script src="js/validate.min.js"></script>
+        <script src="js/selects.js"></script>
+        <script>
+            $(document).ready(function() {
+
+                $('#form').validate({
+                    rules: {
+                        range_from: {
+                            required: true
+                        },
+                        range_to: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        range_from: {
+                            required: 'Пожалуйста, заполните это поле'
+                        },
+                        range_to: {
+                            required: 'Пожалуйста, заполните это поле'
+                        }
+                    },
+                    errorElement: 'span',
+                    onfocusout: function(element){$(element).valid();}              
+                });
+
+            });
+        </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,116 @@
+{% extends "admin/base.html" %}
+{% load adminmedia admin_list i18n %}
+
+{% block meta %}<meta charset="utf-8">{% endblock %}
+{% block title %}Динамика отправки SMS-сообщений{% endblock %}
+{% block css %}{% endblock %}
+{% block favicon %}
+    <link rel="shortcut icon" href="/favicon.ico">
+{% endblock %}
+{% block blockbots %}
+    <meta name="robots" content="NONE,NOARCHIVE" />
+{% endblock %}
+
+{% block navbar%}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="http://smsgo.me/" id="logo" title="Перейти на SmsGo.me"></a>
+                <ul class="nav">
+                    <li><a href="/admin/">Статистика</a></li>
+                    <li class="active"><a href="">SMS-сообщения</a></li>
+                    <li><a href="/admin/settings/settings_messages/">Настройки</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="/admin/logout/">Выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock%}
+
+{% block content %}
+        <div class="container">
+
+            <h1>Динамика отправки SMS-сообщений</h1>
+
+            <div class="row  margin-top">
+                <div class="span12">
+
+                    <ul class="nav nav-tabs">
+                        <li><a href="/admin/">Сегодня</a></li>
+                        <li><a href="/admin/stat/stat_week/">Неделя</a></li>
+                        <li><a href="/admin/stat/stat_mounth/">Месяц</a></li>
+                        <li><a href="/admin/stat/stat_quarter/">Квартал</a></li>
+                        <li><a href="/admin/stat/stat_year/">Год</a></li>
+                        <li class="active"><a href="/admin/stat/stat_alltime/">За все время</a></li>
+                        <li class="pull-right"><a href="/admin/stat/stat_custom/"><i class="icon-filter margin-right"></i>Фильтр</a></li>
+                    </ul>
+
+                    <div class="alert alert-info">Отправлено <a href="/admin/logs/logs_free/" title="Перейти к просмотру сообщений">521</a> бесплатное и <a href="/admin/logs/logs_paid/" title="Перейти к просмотру сообщений">347</a> платных SMS-сообщений на сумму <strong>123 505 р.</strong></div>
+
+                    <div class="alert alert-error">Не удалось отправить <a href="/admin/logs/logs_free/" title="Перейти к просмотру сообщений">1</a> бесплатное и <a href="/admin/logs/logs_paid/" title="Перейти к просмотру сообщений">2</a> платных SMS-сообщения</div>
+
+                    <div id="graph"></div>
+
+                </div>
+            </div>
+
+        </div> <!-- /container -->
+{% endblock %}
+
+{% block footer %}
+        <script>
+            $(document).ready(function() {
+
+                function DrawGraph(){
+
+                    $('#graph').empty();
+
+                    Morris.Line({
+                        element: 'graph',
+                        data: [
+                            {q: '2012-01', a: 1000, b: 500},
+                            {q: '2012-02', a: 1000, b: 500},
+                            {q: '2012-03', a: 1500, b: 500},
+                            {q: '2012-04', a: 3000, b: 2500},
+                            {q: '2012-05', a: 5000, b: 2500},
+                            {q: '2012-06', a: 4000, b: 500}
+                        ],
+                        xkey: 'q',
+                        ykeys: ['a', 'b'],
+                        labels: ['Бесплатные SMS-сообщения', 'Платные SMS-сообщения'],
+                        lineColors: ['#06c','#ff285a'],
+                        lineWidth: 3,
+                        pointSize: 3,
+                        marginTop: 25,
+                        marginRight: 18,
+                        marginBottom: 30,
+                        marginLeft: 30,
+                        numLines: 11,
+                        gridLineColor: '#aaa',
+                        gridTextColor: '#999',
+                        gridTextSize: 12,
+                        gridStrokeWidth: 0.5,
+                        hoverPaddingX: 20,
+                        hoverPaddingY: 10,
+                        hoverMargin: 10,
+                        hoverFillColor: '#fff',
+                        hoverBorderColor: '#eee',
+                        hoverBorderWidth: 3,
+                        hoverOpacity: 1,
+                        hoverLabelColor: '#000',
+                        hoverFontSize: 12
+                    });
+                }
+
+                DrawGraph();
+
+                $(window).resize(function() {
+                    DrawGraph();
+                });
+
+            });
+        </script>
+
+{% endblock %}

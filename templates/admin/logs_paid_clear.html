@@ -1,0 +1,261 @@
+{% extends "admin/base.html" %}
+{% load adminmedia admin_list i18n %}
+
+{% block meta %}<meta charset="utf-8">{% endblock %}
+{% block title %}Очистка платных SMS-сообщений{% endblock %}
+{% block css %}{% endblock %}
+{% block favicon %}
+    <link rel="shortcut icon" href="/favicon.ico">
+{% endblock %}
+{% block blockbots %}
+    <meta name="robots" content="NONE,NOARCHIVE" />
+{% endblock %}
+
+{% block navbar%}
+<div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="http://smsgo.me/" id="logo" title="Перейти на SmsGo.me"></a>
+                <ul class="nav">
+                    <li><a href="/admin/">Статистика</a></li>
+                    <li class="active"><a href="">SMS-сообщения</a></li>
+                    <li><a href="/admin/settings/settings_messages/">Настройки</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="/admin/logout/">Выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock%}
+
+{% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+
+                    <ul class="nav nav-tabs">
+                        <li><a href="/admin/logs/logs_free/">Бесплатные</a></li>
+                        <li class="active"><a href="/admin/logs/logs_paid/">Платные</a></li>
+                    </ul>
+                    <ul class="nav nav-pills">
+                        <li><a href="/admin/logs/logs_paid/" title="Просмотр платных SMS-сообщений"><i class="icon-th-list margin-right"></i>Просмотр</a></li>
+                        <li class="active"><a href="/admin/logs/logs_paid_clear/" title="Очистка платных SMS-сообщений"><i class="icon-trash margin-right"></i>Очистка</a></li>
+                    </ul>
+
+                    <h1>Очистка платных SMS-сообщений</h1>
+
+                    <form class="well form-inline margin-top">
+                        <div class="form-cell margin-right">
+                            <label for="send_from">Отправлено, от</label>
+                            <br />
+                            <input name="send_from" id="send_from" type="text" class="input-medium" placeholder="0000-00-00 00:00"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="send_to">Отправлено, до</label>
+                            <br />
+                            <input name="send_to" id="send_to" type="text" class="input-medium" placeholder="0000-00-00 00:00"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="country">Страна</label>
+                            <br />
+                            <select name="country" id="country" class="input-medium">
+                                <option value="0" selected>Все страны</option>
+                                <option value="1">Россия</option>
+                                <option value="2">Украина</option>
+                                <option value="3">Казахстан</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="region">Регион</label>
+                            <br />
+                            <select name="region" id="region" class="input-medium" disabled>
+                                <option value="0" selected>Все регионы</option>
+                                <option value="1">Брянская область</option>
+                                <option value="2">Москва</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="operator">Оператор</label>
+                            <br />
+                            <select name="operator" id="operator" class="input-medium">
+                                <option value="0" selected>Все операторы</option>
+                                <option value="1">МТС</option>
+                                <option value="2">Билайн</option>
+                                <option value="3">Мегафон</option>
+                                <option value="4">Теле2</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="sender">Отправитель</label>
+                            <br />
+                            <input name="sender" id="sender" type="text" class="input-medium" placeholder="Искать в отправителе"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="number">Номер</label>
+                            <br />
+                            <input name="number" id="number" type="text" class="input-medium" placeholder="Искать в номере"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="message">Сообщение</label>
+                            <br />
+                            <input name="message" id="message" type="text" class="input-medium" placeholder="Искать в сообщении"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="ip">IP-адрес</label>
+                            <br />
+                            <input name="ip" id="ip" type="text" class="input-medium" placeholder="Искать в IP-адресе"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="merchant">Способ оплаты</label>
+                            <br />
+                            <select name="merchant" id="merchant" class="input-medium">
+                                <option value="0" selected>Все способы</option>
+                                <option value="1">Webmoney</option>
+                                <option value="2">SMS</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="status">Статус отправки</label>
+                            <br />
+                            <select name="status" id="status" class="input-medium">
+                                <option value="0" selected>Все статусы</option>
+                                <option value="1">Отправлено</option>
+                                <option value="2">Не отправлено</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="version">Откуда отправлено</label>
+                            <br />
+                            <select name="version" id="version" class="input-medium">
+                                <option value="0" selected>Все ресурсы</option>
+                                <option value="1">smsgo.me</option>
+                                <option value="2">m.smsgo.me</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <button type="submit" class="btn btn-primary form-btn-in-cell">Применить фильтр</button>
+                        </div>
+                        <div class="form-cell">
+                            <a href="#" class="btn form-btn-in-cell">Сбросить</a>
+                        </div>
+                    </form>
+
+                    <div class="confirmation">
+                        Выбрано <strong>5</strong> из <strong>521</strong> сообщения
+                        <a href="#" class="btn btn-danger pull-right margin-right-offset">Удалить выбранные сообщения</a>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="alert alert-success">Выбранные сообщения удалены! <a href="logs_paid.html" title="Просмотр платных SMS-сообщений">Перейти к просмотру сообщений</a></div>
+
+                    <table class="table table-striped margin-top">
+                        <thead>
+                            <tr>
+                                <th style="min-width:100px;"><a href="#" title="Упорядочить по возрастанию">Отправлено</a> &darr;</th>
+                                <th style="min-width:65px;"><a href="#" title="Упорядочить по убыванию">Страна</a></th>
+                                <th style="min-width:65px;"><a href="#" title="Упорядочить по убыванию">Регион</a></th>
+                                <th style="min-width:75px;"><a href="#" title="Упорядочить по убыванию">Оператор</a></th>
+                                <th style="min-width:90px;"><a href="#" title="Упорядочить по убыванию">Отправитель</a></th>
+                                <th style="min-width:75px;"><a href="#" title="Упорядочить по убыванию">Номер</a></th>
+                                <th style="min-width:75px;"><a href="#" title="Упорядочить по убыванию">Сообщение</a></th>
+                                <th style="min-width:75px;"><a href="#" title="Упорядочить по убыванию">IP-адрес</a></th>
+                                <th style="min-width:70px;"><a href="#" title="Упорядочить по убыванию">Оплата</a></th>
+                                <th style="min-width:70px;"><a href="#" title="Упорядочить по убыванию">Сумма, р.</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0000-00-00 00:00</td>       
+                                <td>Россия</td>
+                                <td>Брянская область</td>
+                                <td>Мегафон</td>
+                                <td>SMSGO</td>
+                                <td>+79208499999</td>
+                                <td>Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!</td>
+                                <td>192.168.121.235</td>
+                                <td>Webmoney</td>
+                                <td class="pull-text-center">5</td>
+                            </tr>
+                            <tr>
+                                <td>0000-00-00 00:00</td>       
+                                <td>Россия</td>
+                                <td>Брянская область</td>
+                                <td>Мегафон</td>
+                                <td>SMSGO</td>
+                                <td>+79208499999</td>
+                                <td>Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!</td>
+                                <td>192.168.121.235</td>
+                                <td>Webmoney</td>
+                                <td class="pull-text-center">5</td>
+                            </tr>
+                            <tr>
+                                <td>0000-00-00 00:00</td>       
+                                <td>Россия</td>
+                                <td>Брянская область</td>
+                                <td>Мегафон</td>
+                                <td>SMSGO</td>
+                                <td>+79208499999</td>
+                                <td>Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!</td>
+                                <td>192.168.121.235</td>
+                                <td>Webmoney</td>
+                                <td class="pull-text-center">5</td>
+                            </tr>
+                            <tr>
+                                <td>0000-00-00 00:00</td>       
+                                <td>Россия</td>
+                                <td>Брянская область</td>
+                                <td>Мегафон</td>
+                                <td>SMSGO</td>
+                                <td>+79208499999</td>
+                                <td>Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!</td>
+                                <td>192.168.121.235</td>
+                                <td>Webmoney</td>
+                                <td class="pull-text-center">5</td>
+                            </tr>
+                            <tr class="table-error" title="Сервер оператора не ответил вовремя!">
+                                <td>0000-00-00 00:00</td>       
+                                <td>Россия</td>
+                                <td>Брянская область</td>
+                                <td>Мегафон</td>
+                                <td>SMSGO</td>
+                                <td>+79208499999</td>
+                                <td>Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!</td>
+                                <td>192.168.121.235</td>
+                                <td>Webmoney</td>
+                                <td class="pull-text-center">5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <ul class="pagination-prev-next">
+                        <li class="active">&larr; <a href="#" title="Предыдущая страница">сюда</a></li>
+                        <li><a href="#" title="Следующая страница">туда</a> &rarr;</li>
+                    </ul>
+
+                    <div class="pagination">
+                        <ul>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#" title="Последняя страница">&rarr;</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /container -->
+{% endblock %}
+
+{% block footer %}
+        <script src="/static/js/maskedinput-1.3.min.js"></script>
+        <script src="/static/js/selects.js"></script>
+        <script>
+            $(document).ready(function() {
+                
+                $('#send_from, #send_to').mask('9999-99-99 99:99');
+
+            });
+        </script>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends "admin/base.html" %}
+{% load adminmedia admin_list i18n %}
+
+{% block meta %}<meta charset="utf-8">{% endblock %}
+{% block title %}Динамика отправки SMS-сообщений{% endblock %}
+{% block css %}{% endblock %}
+{% block favicon %}
+    <link rel="shortcut icon" href="/favicon.ico">
+{% endblock %}
+{% block blockbots %}
+    <meta name="robots" content="NONE,NOARCHIVE" />
+{% endblock %}
+
+{% block navbar%}
+<div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="http://smsgo.me/" id="logo" title="Перейти на SmsGo.me"></a>
+                <ul class="nav">
+                    <li><a href="/admin/">Статистика</a></li>
+                    <li class="active"><a href="">SMS-сообщения</a></li>
+                    <li><a href="/admin/settings/settings_messages/">Настройки</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="/admin/logout/">Выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock%}
+
+{% block content %}
+        <div class="container">
+
+            <h1>Динамика отправки SMS-сообщений</h1>
+
+            <div class="row  margin-top">
+                <div class="span12">
+
+                    <ul class="nav nav-tabs">
+                        <li><a href="/admin/">Сегодня</a></li>
+                        <li><a href="/admin/stat/stat_week/">Неделя</a></li>
+                        <li><a href="/admin/stat/stat_mounth/">Месяц</a></li>
+                        <li><a href="/admin/stat/stat_quarter/">Квартал</a></li>
+                        <li><a href="/admin/stat/stat_year/">Год</a></li>
+                        <li><a href="/admin/stat/stat_alltime/">За все время</a></li>
+                        <li class="pull-right active"><a href="/admin/stat/stat_custom/"><i class="icon-filter margin-right"></i>Фильтр</a></li>
+                    </ul>
+
+                    <form class="well form-inline">
+                        <div class="form-cell margin-right">
+                            <label for="send_from">Отправлено, от</label>
+                            <br />
+                            <input name="send_from" id="send_from" type="text" class="input-medium" placeholder="0000-00-00 00:00"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="send_to">Отправлено, до</label>
+                            <br />
+                            <input name="send_to" id="send_to" type="text" class="input-medium" placeholder="0000-00-00 00:00"/>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="country">Страна</label>
+                            <br />
+                            <select id="country" class="input-medium">
+                                <option value="0" selected>Все страны</option>
+                                <option value="1">Россия</option>
+                                <option value="2">Украина</option>
+                                <option value="3">Казахстан</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="region">Регион</label>
+                            <br />
+                            <select id="region" class="input-medium" disabled>
+                                <option value="0" selected>Все регионы</option>
+                                <option value="1">Брянская область</option>
+                                <option value="2">Москва</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="operator">Оператор</label>
+                            <br />
+                            <select id="operator" class="input-medium">
+                                <option value="0" selected>Все операторы</option>
+                                <option value="1">МТС</option>
+                                <option value="2">Билайн</option>
+                                <option value="3">Мегафон</option>
+                                <option value="4">Теле2</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <label for="version">Откуда отправлено</label>
+                            <br />
+                            <select id="version" class="input-medium">
+                                <option value="0" selected>Все ресурсы</option>
+                                <option value="1">smsgo.me</option>
+                                <option value="2">m.smsgo.me</option>
+                            </select>
+                        </div>
+                        <div class="form-cell margin-right">
+                            <button type="submit" class="btn btn-primary form-btn-in-cell">Применить фильтр</button>
+                        </div>
+                        <div class="form-cell">
+                            <a href="#" class="btn form-btn-in-cell">Сбросить</a>
+                        </div>
+                    </form>
+
+                    <div class="alert alert-info">С учетом фильтрации, за выбранный период отправлено <a href="/admin/logs/logs_free/" title="Перейти к просмотру сообщений">521</a> бесплатное и <a href="/admin/logs/logs_paid/" title="Перейти к просмотру сообщений">236</a> платных SMS-сообщений на сумму <strong>123 505 р.</strong></div>
+
+                    <div class="alert alert-error">С учетом фильтрации, за выбранный период не удалось отправить <a href="/admin/logs/logs_free/" title="Перейти к просмотру сообщений">1</a> бесплатное и <a href="/admin/logs/logs_paid/" title="Перейти к просмотру сообщений">2</a> платных SMS-сообщения</div>
+
+                    <div id="graph"></div>
+                    
+                </div>
+            </div>
+
+        </div> <!-- /container -->
+{% endblock %}
+
+{% block footer %}
+        <script src="js/maskedinput-1.3.min.js"></script>
+        <script src="js/selects.js"></script>
+        <script>
+            $(document).ready(function() {
+
+                function DrawGraph(){
+
+                    $('#graph').empty();
+
+                    Morris.Line({
+                        element: 'graph',
+                        data: [
+                            {q: '2012-06-25', a: 10, b: 5},
+                            {q: '2012-06-26', a: 10, b: 5},
+                            {q: '2012-06-27', a: 15, b: 5},
+                            {q: '2012-06-28', a: 30, b: 25},
+                            {q: '2012-06-29', a: 50, b: 25},
+                            {q: '2012-06-30', a: 40, b: 5},
+                            {q: '2012-07-1', a: 39, b: 75}
+                        ],
+                        xkey: 'q',
+                        ykeys: ['a', 'b'],
+                        labels: ['Бесплатные SMS-сообщения', 'Платные SMS-сообщения'],
+                        lineColors: ['#06c','#ff285a'],
+                        lineWidth: 3,
+                        pointSize: 3,
+                        marginTop: 25,
+                        marginRight: 18,
+                        marginBottom: 30,
+                        marginLeft: 30,
+                        numLines: 11,
+                        gridLineColor: '#aaa',
+                        gridTextColor: '#999',
+                        gridTextSize: 12,
+                        gridStrokeWidth: 0.5,
+                        hoverPaddingX: 20,
+                        hoverPaddingY: 10,
+                        hoverMargin: 10,
+                        hoverFillColor: '#fff',
+                        hoverBorderColor: '#eee',
+                        hoverBorderWidth: 3,
+                        hoverOpacity: 1,
+                        hoverLabelColor: '#000',
+                        hoverFontSize: 12
+                    });
+                }
+
+                DrawGraph();
+
+                $(window).resize(function() {
+                    DrawGraph();
+                });
+
+                $('#send_from, #send_to').mask('9999-99-99 99:99');       
+
+            });
+        </script>
+
+{% endblock %}

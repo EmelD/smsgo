@@ -1,0 +1,108 @@
+{% extends "templ/base.html" %}
+
+{% block meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="Хотите отправить SMS-сообщение бесплатно? Или разыграть друга, подменив номер отправителя? Мы поможем вам в этом!">
+{% endblock %}
+
+{% block title %}
+    <title>Отправляй SMS без забот!</title>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
+
+{% block content %}
+    <?php if ( $send ) { ?>
+    <div id="main-form-container" class="success">
+        <div class="content">
+            <div class="clearfix"></div>
+                <span id="main-form-title">
+                    <h1>Сообщение отправлено!</h1>
+                </span>
+            <p class="large margin-top-large-negative"><a href="/">Отправить еще одно</a></p>
+        </div>
+    </div>
+    <?php } else { ?>
+    <div id="main-form-container" class="error">
+        <div class="content">
+            <div class="clearfix"></div>
+                <span id="main-form-title">
+                    <h1>Сообщение отправить не удалось!</h1>
+                </span>
+            <p class="large margin-top-large-negative">
+                <?php echo $error . '<br>'; ?>
+                <a href="/">Отправить еще раз</a> или <a href="/feedback" class="dotted show-feedback">сообщить об ошибке</a>
+            </p>
+        </div>
+    </div>
+    <?php } ?>
+    <div class="content">
+        <div class="main-column">
+            <h2>Разыграй друга — отправь ему прикольное СМС!</h2>
+            <div class="p-hr">
+                <p><a href="/paidsms/0" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+                <p><a href="/paidsms/1" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+                <p><a href="/paidsms/2" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+                <p><a href="/paidsms/3" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+                <p><a href="/paidsms/4" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+                <p><a href="/paidsms/5" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+                <p><a href="/paidsms/6" title="Отправить сообщение с подменой номера">LUNATIKI 0</a><br><span>0 С Вашего лицевого счёта было снято 200 руб. на озеленение Луны. Благодарим за помощь. Лунатики.</span></p>
+            </div>
+        </div>
+        <div class="sidebar">
+            {% include 'templ/-adv_sidebar.html' %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    {% include 'templ/-footer.html' %}
+    {% include 'templ/-feedback.html' %}
+{% endblock %}
+
+{% block footer %}
+    <script src="/static/js/libs/jquery-1.7.2.min.js"></script>
+    <script src="/static/js/libs/jquery.validate.min.js"></script>
+    <script src="/static/js/functions.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            getLastTweet ('smsgome', $('#twitter-tweet'), 'Идет загрузка твитов…');
+
+            var feedbackFormValidator = $('#feedback').validate({
+                rules: {
+                    message: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    }
+                },
+                messages: {
+                    message: {
+                        required: 'Напишите сообщение'
+                    },
+                    email: {
+                        required: 'Введите электронную почту для ответа'
+                    }
+                },
+                errorElement: 'span'
+            });
+
+            $('.show-feedback')
+                    .bind('click', function() {
+                        return initializeModalWindow ($('#modal-box'), $('#overlay'), $('#modal-close'), 150);
+                    });
+
+        });
+
+        /*
+         var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+         (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+         g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+         s.parentNode.insertBefore(g,s)}(document,'script'));
+         */
+    </script>
+{% endblock %}
